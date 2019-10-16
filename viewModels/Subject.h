@@ -8,13 +8,21 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 #include "Observer.h"
 
 template< class Result>
 class Subject {
     Result result;
     std::vector<std::shared_ptr<Observer<Result>>> observers;
+    std::vector<std::function<void(const Result&)>> lambdas;
 public:
+    void observe(std::function<void(const Result&)> lambda){
+        lambdas.push_back(lambda);
+        if(!result.empty()){
+            lambda(result);
+        }
+    }
     void observe(std::shared_ptr<Observer<Result>> observer){
         observers.push_back(observer);
         if(!result.empty()){
@@ -25,6 +33,9 @@ public:
     void notify() {
         for(auto observer : observers){
             observer->handle(result);
+        }
+        for(auto lambda : lambdas){
+            lambda(result);
         }
     }
 

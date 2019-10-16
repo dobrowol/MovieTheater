@@ -12,16 +12,18 @@
 #include <iostream>
 #include <memory>
 #include "../viewModels/Observer.h"
+#include "../Command.h"
+
 template<class ViewModel>
-class GetAllMovies : public Observer<std::vector<std::string>>, std::enable_shared_from_this<GetAllMovies<ViewModel>>{
+class GetAllMovies : public Command, Observer<std::vector<std::string>>, std::enable_shared_from_this<GetAllMovies<ViewModel>>{
 	ViewModel viewModel;
 public:
 	GetAllMovies() = default;
 	virtual ~GetAllMovies() = default;
-	void execute(){
+	void execute(std::vector<std::string> args) override{
 		auto callback = [&](const std::vector<std::string>& res){
 			this->handle(res);};
-		viewModel.getAllMovies()->observe(this->shared_from_this());
+		viewModel.getAllMovies()->observe(callback);
 	}
 	void handle(const std::vector<std::string>& res) override {
 		for(const std::string& s : res){
