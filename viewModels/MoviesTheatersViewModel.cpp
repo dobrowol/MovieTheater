@@ -4,11 +4,12 @@
 
 #include <functional>
 #include <vector>
+#include "Subject.h"
 
 class MoviesTheatersViewModel{
 
 public:
-    Subject getTheatersForMovie(std::string movie, const std::function< void(const std::vector<std::string>) >& lambda){
+    std::shared_ptr<Subject<std::vector<std::string>>> getTheatersForMovie(const std::string& movie){
 
     }
 };

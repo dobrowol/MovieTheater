@@ -10,19 +10,21 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <memory>
+#include "../viewModels/Observer.h"
 template<class ViewModel>
-class GetAllMovies {
+class GetAllMovies : public Observer<std::vector<std::string>>, std::enable_shared_from_this<GetAllMovies<ViewModel>>{
 	ViewModel viewModel;
 public:
-	GetAllMovies(){};
-	virtual ~GetAllMovies(){};
+	GetAllMovies() = default;
+	virtual ~GetAllMovies() = default;
 	void execute(){
 		auto callback = [&](const std::vector<std::string>& res){
-			this->processData(res);};
-		viewModel.getAllMovies(callback);
+			this->handle(res);};
+		viewModel.getAllMovies()->observe(this->shared_from_this());
 	}
-	void processData(const std::vector<std::string>& res){
-		for(std::string s : res){
+	void handle(const std::vector<std::string>& res) override {
+		for(const std::string& s : res){
 			std::cout<<s<<std::endl;
 		}
 	}

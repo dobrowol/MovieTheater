@@ -7,7 +7,8 @@
 
 template<class Result>
 class Observer {
-    virtual void handle(Result result) = 0;
+public:
+    virtual void handle(const Result& result) = 0;
 };
 
 

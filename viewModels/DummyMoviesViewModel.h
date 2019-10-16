@@ -2,10 +2,15 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include "Subject.h"
+
 class DummyMoviesViewModel{
 
 public:
-	void getAllMovies(const std::function< void(const std::vector<std::string>) >& lambda){
-		lambda( {"Joker", "Legiony", "Last Mountain"});
+	std::shared_ptr<Subject<std::vector<std::string>>> getAllMovies(){
+	    std::shared_ptr<Subject<std::vector<std::string>>> subject =
+	            std::make_shared<Subject<std::vector<std::string>>>();
+	    subject->setValue({"Legiony", "Joker", "Last Mountain"});
+        return subject;
 	}
 };

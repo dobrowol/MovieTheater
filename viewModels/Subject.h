@@ -15,12 +15,22 @@ class Subject {
     Result result;
     std::vector<std::shared_ptr<Observer<Result>>> observers;
 public:
-    //wzorzec Command
-    void observe(Observer<Result> observer){
+    void observe(std::shared_ptr<Observer<Result>> observer){
         observers.push_back(observer);
+        if(!result.empty()){
+            observer->handle(result);
+        }
     }
+
+    void notify() {
+        for(auto observer : observers){
+            observer->handle(result);
+        }
+    }
+
     void setValue(Result result){
         this->result = result;
+        notify();
     }
 };
 

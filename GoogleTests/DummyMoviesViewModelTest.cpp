@@ -8,22 +8,22 @@
 
 #include "gtest/gtest.h"
 #include "../viewModels/DummyMoviesViewModel.h"
+#include "ObserverMock.h"
 
 using ::testing::_;
 namespace {
   class DummyMoviesViewModelTest : public ::testing::Test {
+      using ResultObserver = ObserverMock<std::vector<std::string>>;
   protected:
+      std::shared_ptr<ResultObserver> observer = std::make_shared<ResultObserver>();
 	  DummyMoviesViewModel foo;
 	  using CallbackFunctionMock = testing::MockFunction< void(const std::vector<std::string>)>;
 
   };
   TEST_F(DummyMoviesViewModelTest, DummyMoviesViewModel) {
-        CallbackFunctionMock  callbackFunctionMock;
-      auto callback = [&](const std::vector<std::string>& param){
-          callbackFunctionMock.Call(param);};
 
-	  EXPECT_CALL(callbackFunctionMock, Call(_)).Times(1);
-        foo.getAllMovies(callback);
+	  EXPECT_CALL(*observer, handle(_)).Times(1);
+	  foo.getAllMovies()->observe(observer);
   }
 }
 
