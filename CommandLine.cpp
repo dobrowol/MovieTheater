@@ -12,6 +12,7 @@
 #include "viewModels/DummyMoviesViewModel.h"
 #include "viewModels/MoviesTheatersViewModel.h"
 #include "commands/GetTheaterForMovie.h"
+#include "commands/GetSeatsForMovieTheater.h"
 
 class CommandLine{
     std::unordered_map<std::string, std::shared_ptr<Command>> commands;
@@ -25,13 +26,16 @@ class CommandLine{
 public:
     CommandLine():commands({
                                    {"getAllMovies", std::make_shared<GetAllMovies<DummyMoviesViewModel>>()},
-                                   {"getTheatersForMovie", std::make_shared<GetTheaterForMovie<MoviesTheatersViewModel>>()}
+                                   {"getTheatersForMovie", std::make_shared<GetTheaterForMovie<MoviesTheatersViewModel>>()},
+                                   {"getSeatsForMovieTheater", std::make_shared<GetSeatsForMovieTheater<MoviesTheatersViewModel>>()}
                            }){}
 
     void process(const std::string& line){
         auto args = split(line);
         if(!args.empty()) {
-            commands[args[0]]->execute({args.begin() + 1, args.end()});
+            if(commands.find(args[0]) != commands.end()) {
+                commands[args[0]]->execute({args.begin() + 1, args.end()});
+            }
         }
     }
 };

@@ -17,6 +17,8 @@ class Subject {
     std::vector<std::shared_ptr<Observer<Result>>> observers;
     std::vector<std::function<void(const Result&)>> lambdas;
 public:
+    Subject() = default;
+    explicit Subject(Result res):result(res){}
     void observe(std::function<void(const Result&)> lambda){
         lambdas.push_back(lambda);
         if(!result.empty()){
