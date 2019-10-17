@@ -31,7 +31,7 @@ public:
         std::lock_guard<std::mutex> lock(insert_mutex);
         for(auto mTS : movieTheaterSeats){
             if (mTS.movie == movieTheaterSeats1.movie && mTS.theater == movieTheaterSeats1.theater){
-                mTS.seats = movieTheaterSeats1.seats;
+                mTS.seats |= movieTheaterSeats1.seats;
             }
         }
     }

@@ -9,7 +9,8 @@
 
 class MoviesTheatersViewModel{
     using Subject_String=Subject<std::vector<std::string>>;
-    using Subject_Int=Subject<std::vector<int>>;
+    using Subject_Bitset=Subject<std::bitset<20>>;
+    MovieTheaterSeatsDAO movieTheaterSeatsDao;
 public:
     std::shared_ptr<Subject_String> getTheatersForMovie(const std::string& movie){
         if(movie == "Legiony"){
@@ -19,8 +20,11 @@ public:
             return subject;
         }
     }
-    std::shared_ptr<Subject_Int> getSeatsForMovieTheater(const std::string& movie, const std::string& theater){
-        MovieTheaterSeatsDAO movieTheaterSeatsDao;
+    std::shared_ptr<Subject_Bitset> getSeatsForMovieTheater(const std::string& movie, const std::string& theater){
         return movieTheaterSeatsDao.getSeatsForMovieTheater(movie, theater);
+    }
+
+    void reserveSeatsForMovieTheater(const std::string& movie, const std::string& theater, std::bitset<20> seats){
+        movieTheaterSeatsDao.reserveSeatsForMovieTheater(movie, theater, seats);
     }
 };

@@ -14,7 +14,4 @@ public:
 	    subject->setValue({"Legiony", "Joker", "LastMountain"});
         return subject;
 	}
-	std::shared_ptr<Movie> getMovieDetail(const std::string& movie){
-
-	}
 };

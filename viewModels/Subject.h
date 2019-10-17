@@ -21,15 +21,12 @@ public:
     explicit Subject(Result res):result(res){}
     void observe(std::function<void(const Result&)> lambda){
         lambdas.push_back(lambda);
-        if(!result.empty()){
-            lambda(result);
-        }
+
+        lambda(result);
     }
     void observe(std::shared_ptr<Observer<Result>> observer){
         observers.push_back(observer);
-        if(!result.empty()){
-            observer->handle(result);
-        }
+        observer->handle(result);
     }
 
     void notify() {

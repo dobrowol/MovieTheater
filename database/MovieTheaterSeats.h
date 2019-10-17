@@ -8,16 +8,19 @@
 
 #include <string>
 #include <vector>
+#include <bitset>
 
 struct MovieTheaterSeats {
-    MovieTheaterSeats(std::string movie, std::string theater): movie(std::move(movie)), theater(std::move(theater)), seats(20, 0) {
-        
-    }
+    MovieTheaterSeats(std::string movie, std::string theater): movie(std::move(movie)), theater(std::move(theater)),
+    seats( 0) {}
+
+    MovieTheaterSeats(const std::string& movie, const std::string& theater, std::bitset<20> seats):movie(movie),
+    theater(theater), seats(seats) {}
 
     std::string movie;
     std::string theater;
-    std::vector<int> seats;
-    MovieTheaterSeats():movie(""), theater(""), seats(20, 0){}
+    std::bitset<20> seats;
+    MovieTheaterSeats():movie(""), theater(""), seats(0){}
 };
 
 

@@ -15,15 +15,15 @@ public:
     GetSeatsForMovieTheater() = default;
     virtual ~GetSeatsForMovieTheater() = default;
     void execute(std::vector<std::string> args) override{
-        auto callback = [&](const std::vector<int>& res){
+        auto callback = [&](const std::bitset<20>& res){
             this->handle(res);};
         if(!args.empty()) {
             viewModel.getSeatsForMovieTheater(args[0], args[1])->observe(callback);
         }
     }
-    void handle(const std::vector<int>& res)  {
-        for(int s : res){
-            std::cout<<s<<" ";
+    void handle(const std::bitset<20>& res)  {
+        for(auto s = 1; s < res.size(); s++){
+            std::cout<<"a"<<s<<" "<<res[s]<<std::endl;
         }
         std::cout<<std::endl;
     }
