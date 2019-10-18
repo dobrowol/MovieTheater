@@ -8,15 +8,21 @@
 #include <iostream>
 #include "../Command.h"
 
+class AvailableSeatsSetter {
+public:
+    virtual void setSeats(std::bitset<20>) = 0;
+};
+
 template<class ViewModel>
 class GetSeatsForMovieTheater : public Command {
     ViewModel viewModel;
+    std::shared_ptr<AvailableSeatsSetter> setter;
 public:
-    GetSeatsForMovieTheater() = default;
+    explicit GetSeatsForMovieTheater(std::shared_ptr<AvailableSeatsSetter> setter):setter(std::move(setter)){};
 
     virtual ~GetSeatsForMovieTheater() = default;
 
-    void execute(std::vector<std::string> args) override {
+    bool execute(std::vector<std::string> args) override {
         auto callback = [&](const std::bitset<20> &res) {
             this->handle(res);
         };
@@ -32,6 +38,7 @@ public:
             }
         }
         std::cout << std::endl;
+        setter->setSeats(res);
     }
 
     bool inputCheck(std::vector<std::string> args) override {

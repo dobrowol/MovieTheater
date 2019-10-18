@@ -14,8 +14,13 @@
 #include "commands/GetTheaterForMovie.h"
 #include "commands/GetSeatsForMovieTheater.h"
 #include "commands/ReserveSeatsForMovieTheater.h"
+#include "commands/SelectMovie.h"
 
-class MainActivity {
+class MainActivity : public SelectMovie::MovieSelectionInterface, public AvailableSeatsSetter, public SeatsProvider<std::bitset<20>>,
+                     std::enable_shared_from_this<MainActivity> {
+
+    using Seats_Container = std::bitset<20>;
+
     std::unordered_map<std::string, std::shared_ptr<Command>> commands;
 
     std::vector<std::string> split(const std::string &line) {
@@ -25,14 +30,16 @@ class MainActivity {
         return results;
     }
 
-    std::string movie;
-    std::string theater;
+    MovieTheaterSeats movieTheaterSeats;
 public:
     MainActivity() : commands({
-                                      {"getAllMovies",                std::make_shared<GetAllMovies<DummyMoviesViewModel>>()},
-                                      {"getTheatersForMovie",         std::make_shared<GetTheaterForMovie<MoviesTheatersViewModel>>()},
-                                      {"getSeatsForMovieTheater",     std::make_shared<GetSeatsForMovieTheater<MoviesTheatersViewModel>>()},
-                                      {"reserveSeatsForMovieTheater", std::make_shared<ReserveSeatsForMovieTheater<MoviesTheatersViewModel>>()}
+                                      {"getAllMovies",            std::make_shared<GetAllMovies<DummyMoviesViewModel>>()},
+                                      {"getTheatersForMovie",     std::make_shared<GetTheaterForMovie<MoviesTheatersViewModel>>()},
+                                      {"getSeatsForMovieTheater", std::make_shared<GetSeatsForMovieTheater<MoviesTheatersViewModel>>(
+                                              std::static_pointer_cast<AvailableSeatsSetter>(shared_from_this()))},
+                                      {"reserveSeatsForMovieTheater",
+                                                                  std::make_shared<ReserveSeatsForMovieTheater<MoviesTheatersViewModel,
+                                                                          Seats_Container>>(shared_from_this())}
                               }) {}
 
     void process(const std::string &line) {
@@ -42,5 +49,17 @@ public:
                 commands[args[0]]->execute({args.begin() + 1, args.end()});
             }
         }
+    }
+
+    void setMovie(std::string movie) override {
+        movieTheaterSeats.movie = std::move(movie);
+    }
+
+    void setSeats(Seats_Container seats) override {
+        movieTheaterSeats.seats = seats;
+    }
+
+    Seats_Container getSeats() override {
+        return movieTheaterSeats.seats;
     }
 };

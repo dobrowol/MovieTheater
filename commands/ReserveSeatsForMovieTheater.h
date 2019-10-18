@@ -10,11 +10,20 @@
 #include "../Command.h"
 #include <boost/regex.hpp>
 
-template<class ViewModel>
+template<class Seats>
+class SeatsProvider {
+public:
+    virtual Seats getSeats() = 0;
+};
+
+template<class ViewModel, class Seats>
 class ReserveSeatsForMovieTheater : public Command {
     ViewModel viewModel;
+    std::shared_ptr<SeatsProvider<Seats>> availableSeatsProvider;
+    std::vector<int> seatsNumbers;
 public:
-    ReserveSeatsForMovieTheater() = default;
+    explicit ReserveSeatsForMovieTheater(std::shared_ptr<SeatsProvider<Seats>> availableSeatsProvider) :
+            availableSeatsProvider(availableSeatsProvider) {};
 
     virtual ~ReserveSeatsForMovieTheater() = default;
 
@@ -24,20 +33,37 @@ public:
         return std::stoi(sm1[1]);
     }
 
-    void execute(std::vector<std::string> args) override {
-        if (!args.empty()) {
-            std::bitset<20> seats(0);
-            if (args.size() > 2) {
-                for (auto i = args.begin() + 2; i != args.end(); i++) {
-                    int seat_nbr = parse_integer(*i);
-                    seats[seat_nbr] = true;
+    bool execute(std::vector<std::string> args) override {
+        if (inputCheck(args)) {
+            Seats availableSeats = availableSeatsProvider->getSeats();
+            std::bitset<20> reserved_seats(0);
+
+            for (auto seat_nbr : seatsNumbers) {
+                if (!availableSeats[seat_nbr])
+                    reserved_seats[seat_nbr] = true;
+                else {
+                    return false;
                 }
             }
-            viewModel.reserveSeatsForMovieTheater(args[0], args[1], seats);
+
+            viewModel.reserveSeatsForMovieTheater(args[0], args[1], reserved_seats);
+        } else {
+            return false;
         }
+        return true;
     }
 
     bool inputCheck(std::vector<std::string> args) override {
+        if (args.size() < 3)
+            return false;
+        boost::regex pattern("a(\\d+)");
+        boost::smatch result;
+        for (auto i = args.begin() + 2; i != args.end(); i++) {
+            if (!boost::regex_search(*i, result, pattern)) {
+                return false;
+            }
+            seatsNumbers.emplace_back(std::stoi(result[1]));
+        }
         return true;
     }
 };

@@ -8,19 +8,24 @@
 #include <memory>
 #include "../Command.h"
 
-class SelectMovie : public Command{
+class SelectMovie : public Command {
 
 public:
-    class MovieSelectionInterface{
-        virtual void setMovie() = 0;
+    class MovieSelectionInterface {
+        virtual void setMovie(std::string) = 0;
     };
-    void execute(std::vector<std::string> args) override{
+
+    explicit SelectMovie(std::shared_ptr<MovieSelectionInterface> movieSelectionInterface) :
+            movieSelectionInterface(std::move(movieSelectionInterface)) {}
+
+    bool execute(std::vector<std::string> args) override {
 
     }
 
-    bool inputCheck(std::vector<std::string> args) override{
+    bool inputCheck(std::vector<std::string> args) override {
         return true;
     }
+
 private:
     std::shared_ptr<MovieSelectionInterface> movieSelectionInterface;
 };

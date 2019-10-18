@@ -11,7 +11,7 @@
 
 class Command {
 public:
-    virtual void execute(std::vector<std::string> args) = 0;
+    virtual bool execute(std::vector<std::string> args) = 0;
 
     virtual bool inputCheck(std::vector<std::string> args) = 0;
 };

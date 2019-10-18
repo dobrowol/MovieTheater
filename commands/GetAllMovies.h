@@ -23,7 +23,7 @@ public:
 
     virtual ~GetAllMovies() = default;
 
-    void execute(std::vector<std::string> args) override {
+    bool execute(std::vector<std::string> args) override {
         auto callback = [&](const std::vector<std::string> &res) {
             this->handle(res);
         };
