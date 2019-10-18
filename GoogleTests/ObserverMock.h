@@ -6,8 +6,9 @@
 #define MOVIETHEATER_OBSERVERMOCK_H
 #include "gmock/gmock.h"
 #include "../viewModels/Observer.h"
-template <class Result>
-class ObserverMock : public Observer<Result>{
+
+template<class Result>
+class ObserverMock : public Observer<Result> {
 public:
     MOCK_METHOD(void, handle, (const Result&), (override));
 };

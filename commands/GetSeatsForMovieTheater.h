@@ -9,23 +9,33 @@
 #include "../Command.h"
 
 template<class ViewModel>
-class GetSeatsForMovieTheater : public Command{
+class GetSeatsForMovieTheater : public Command {
     ViewModel viewModel;
 public:
     GetSeatsForMovieTheater() = default;
+
     virtual ~GetSeatsForMovieTheater() = default;
-    void execute(std::vector<std::string> args) override{
-        auto callback = [&](const std::bitset<20>& res){
-            this->handle(res);};
-        if(!args.empty()) {
+
+    void execute(std::vector<std::string> args) override {
+        auto callback = [&](const std::bitset<20> &res) {
+            this->handle(res);
+        };
+        if (!args.empty()) {
             viewModel.getSeatsForMovieTheater(args[0], args[1])->observe(callback);
         }
     }
-    void handle(const std::bitset<20>& res)  {
-        for(auto s = 1; s < res.size(); s++){
-            std::cout<<"a"<<s<<" "<<res[s]<<std::endl;
+
+    void handle(const std::bitset<20> &res) {
+        for (auto s = 0; s < res.size(); s++) {
+            if (!res[s]) {
+                std::cout << "a" << s << " ";
+            }
         }
-        std::cout<<std::endl;
+        std::cout << std::endl;
+    }
+
+    bool inputCheck(std::vector<std::string> args) override {
+        return true;
     }
 };
 #endif //MOVIETHEATER_GETSEATSFORMOVIETHEATER_H

@@ -1,13 +1,13 @@
 #include <iostream>
-#include "CommandLine.cpp"
+#include "MainActivity.cpp"
+
 using namespace std;
 
 
 int main() {
-    CommandLine commandLine;
-    for (std::string line; std::cout << "APP > " && std::getline(std::cin, line); )
-    {
-        
+    MainActivity commandLine;
+    for (std::string line; std::cout << "APP > " && std::getline(std::cin, line);) {
+
         if (!line.empty()) { commandLine.process(line); }
     }
 

@@ -12,19 +12,20 @@
 
 using ::testing::_;
 namespace {
-  class MoviesTheatersViewModelTest : public ::testing::Test {
-      using ResultObserver = ObserverMock<std::vector<std::string>>;
-  protected:
-      std::shared_ptr<ResultObserver> observer = std::make_shared<ResultObserver>();
-	  MoviesTheatersViewModel foo;
-	  using CallbackFunctionMock = testing::MockFunction< void(const std::vector<std::string>)>;
+    class MoviesTheatersViewModelTest : public ::testing::Test {
+        using ResultObserver = ObserverMock<std::vector<std::string>>;
+    protected:
+        std::shared_ptr<ResultObserver> observer = std::make_shared<ResultObserver>();
+        MoviesTheatersViewModel foo;
+        using CallbackFunctionMock = testing::MockFunction<void(const std::vector<std::string>)>;
 
-  };
-  TEST_F(MoviesTheatersViewModelTest, MoviesTheatersViewModel) {
+    };
 
-	  EXPECT_CALL(*observer, handle(_)).Times(1);
-	  foo.getTheatersForMovie("Legiony")->observe(observer);
-  }
+    TEST_F(MoviesTheatersViewModelTest, MoviesTheatersViewModel) {
+
+        EXPECT_CALL(*observer, handle(_)).Times(1);
+        foo.getTheatersForMovie("Legiony")->observe(observer);
+    }
 }
 
 

@@ -14,5 +14,4 @@ struct Movie {
     std::string date_of_production;
 };
 
-
 #endif //MOVIETHEATER_MOVIE_H
