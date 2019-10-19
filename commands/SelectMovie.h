@@ -12,6 +12,7 @@ class SelectMovie : public Command {
 
 public:
     class MovieSelectionInterface {
+    public:
         virtual void setMovie(std::string) = 0;
     };
 
@@ -19,11 +20,16 @@ public:
             movieSelectionInterface(std::move(movieSelectionInterface)) {}
 
     bool execute(std::vector<std::string> args) override {
+        if(!inputCheck(args)){
+            return false;
+        }
 
+        movieSelectionInterface->setMovie(args[0]);
+        return true;
     }
 
     bool inputCheck(std::vector<std::string> args) override {
-        return true;
+        return args.size() == 1;
     }
 
 private:

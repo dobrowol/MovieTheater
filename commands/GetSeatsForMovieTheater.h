@@ -23,12 +23,16 @@ public:
     virtual ~GetSeatsForMovieTheater() = default;
 
     bool execute(std::vector<std::string> args) override {
+        if(!inputCheck(args)){
+            return false;
+        }
         auto callback = [&](const std::bitset<20> &res) {
             this->handle(res);
         };
         if (!args.empty()) {
             viewModel.getSeatsForMovieTheater(args[0], args[1])->observe(callback);
         }
+        return true;
     }
 
     void handle(const std::bitset<20> &res) {

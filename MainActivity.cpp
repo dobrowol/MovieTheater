@@ -16,10 +16,9 @@
 #include "commands/ReserveSeatsForMovieTheater.h"
 #include "commands/SelectMovie.h"
 
-class MainActivity : public SelectMovie::MovieSelectionInterface, public AvailableSeatsSetter, public SeatsProvider<std::bitset<20>>,
-                     std::enable_shared_from_this<MainActivity> {
-
-    using Seats_Container = std::bitset<20>;
+template<class Seats_Container>
+class MainActivity : public SelectMovie::MovieSelectionInterface, public AvailableSeatsSetter, public SeatsProvider<Seats_Container>,
+                     public std::enable_shared_from_this<MainActivity<Seats_Container>> {
 
     std::unordered_map<std::string, std::shared_ptr<Command>> commands;
 
@@ -32,15 +31,7 @@ class MainActivity : public SelectMovie::MovieSelectionInterface, public Availab
 
     MovieTheaterSeats movieTheaterSeats;
 public:
-    MainActivity() : commands({
-                                      {"getAllMovies",            std::make_shared<GetAllMovies<DummyMoviesViewModel>>()},
-                                      {"getTheatersForMovie",     std::make_shared<GetTheaterForMovie<MoviesTheatersViewModel>>()},
-                                      {"getSeatsForMovieTheater", std::make_shared<GetSeatsForMovieTheater<MoviesTheatersViewModel>>(
-                                              std::static_pointer_cast<AvailableSeatsSetter>(shared_from_this()))},
-                                      {"reserveSeatsForMovieTheater",
-                                                                  std::make_shared<ReserveSeatsForMovieTheater<MoviesTheatersViewModel,
-                                                                          Seats_Container>>(shared_from_this())}
-                              }) {}
+    MainActivity() = default;
 
     void process(const std::string &line) {
         auto args = split(line);
@@ -61,5 +52,9 @@ public:
 
     Seats_Container getSeats() override {
         return movieTheaterSeats.seats;
+    }
+
+    void setCommand(const std::string &commandName, const std::shared_ptr<Command>& command) {
+        commands[commandName] = command;
     }
 };

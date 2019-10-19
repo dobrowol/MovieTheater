@@ -24,10 +24,15 @@ public:
     virtual ~GetAllMovies() = default;
 
     bool execute(std::vector<std::string> args) override {
-        auto callback = [&](const std::vector<std::string> &res) {
-            this->handle(res);
-        };
-        viewModel.getAllMovies()->observe(callback);
+        if(inputCheck(args)) {
+            auto callback = [&](const std::vector<std::string> &res) {
+                this->handle(res);
+            };
+            viewModel.getAllMovies()->observe(callback);
+            return true;
+        } else{
+            return false;
+        }
     }
 
     void handle(const std::vector<std::string> &res) override {
@@ -37,7 +42,7 @@ public:
     }
 
     bool inputCheck(std::vector<std::string> args) override {
-        return true;
+        return args.empty();
     }
 };
 

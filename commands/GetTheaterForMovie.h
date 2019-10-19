@@ -17,12 +17,16 @@ public:
     virtual ~GetTheaterForMovie() = default;
 
     bool execute(std::vector<std::string> args) override {
+        if(!inputCheck(args)){
+            return false;
+        }
         auto callback = [&](const std::vector<std::string> &res) {
             this->handle(res);
         };
         if (!args.empty()) {
             viewModel.getTheatersForMovie(args[0])->observe(callback);
         }
+        return true;
     }
 
     void handle(const std::vector<std::string> &res) {

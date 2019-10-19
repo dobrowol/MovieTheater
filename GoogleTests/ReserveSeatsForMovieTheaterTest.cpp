@@ -6,6 +6,7 @@
  */
 #include <bitset>
 #include "gmock/gmock.h"
+#include <cstdio>
 
 #include "gtest/gtest.h"
 #include "ObserverMock.h"
@@ -19,8 +20,6 @@ using ::testing::NiceMock;
 namespace {
     class ReserveSeatsForMovieTheaterTest : public ::testing::Test {
 
-
-
     protected:
         using Result = std::bitset<20>;
         using ResultObserver = ObserverMock<Result>;
@@ -30,14 +29,16 @@ namespace {
         std::shared_ptr<ResultObserver> observer = std::make_shared<ResultObserver>();
         ReserveSeatsForMovieTheater<MoviesTheatersViewModel, Result > foo;
         using CallbackFunctionMock = testing::MockFunction<void(const Result &)>;
-        ReserveSeatsForMovieTheaterTest():foo(seatsProviderMock){
-
-        }
+        ReserveSeatsForMovieTheaterTest():foo(seatsProviderMock){}
     };
 
     TEST_F(ReserveSeatsForMovieTheaterTest, ParseSeatNumber) {
-        int i = foo.parse_integer("a1");
-        EXPECT_EQ(1, i);
+        int expectedSeatNumber = 1;
+        std::ostringstream stringStream;
+        stringStream << "a"<<expectedSeatNumber;
+        std::string seatString = stringStream.str();
+        int seatNumber = foo.parse_integer(seatString);
+        EXPECT_EQ(1, seatNumber);
     }
 
     TEST_F(ReserveSeatsForMovieTheaterTest, ReserveValidSeat) {
@@ -54,8 +55,10 @@ namespace {
     }
 
     TEST_F(ReserveSeatsForMovieTheaterTest, ReserveNotValidSeat) {
-        //b1
-        //a200
+        EXPECT_CALL(*seatsProviderMock,getSeats()).Times(1);
+        EXPECT_FALSE(foo.execute({"Legiony", "Arkady", "b1"}));
+        EXPECT_FALSE(foo.execute({"Legiony", "Arkady", "a200"}));
+
     }
 }
 

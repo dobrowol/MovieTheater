@@ -36,9 +36,11 @@ public:
     bool execute(std::vector<std::string> args) override {
         if (inputCheck(args)) {
             Seats availableSeats = availableSeatsProvider->getSeats();
-            std::bitset<20> reserved_seats(0);
+            Seats reserved_seats(0);
 
             for (auto seat_nbr : seatsNumbers) {
+                if(seat_nbr > availableSeats.size())
+                    return false;
                 if (!availableSeats[seat_nbr])
                     reserved_seats[seat_nbr] = true;
                 else {
