@@ -36,6 +36,18 @@ class MainActivity
 public:
     MainActivity() = default;
 
+    /**
+ * \brief   The process function.
+ *
+ * \details This function process command from client. Its input is string and
+ *          it uses command map to select proper command to execute. Commands are
+ *          set up before.
+ *
+ *
+ * \param[in]     line    Input from client.
+ *
+ * \return        Nothing is returned.
+ */
     void process(const std::string &line) {
         auto args = split(line);
         if (!args.empty()) {
