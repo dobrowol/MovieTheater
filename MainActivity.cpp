@@ -8,17 +8,20 @@
 #include <sstream>
 #include <iterator>
 #include "Command.h"
-#include "commands/GetAllMovies.h"
-#include "viewModels/DummyMoviesViewModel.h"
 #include "viewModels/MoviesTheatersViewModel.h"
 #include "commands/GetTheaterForMovie.h"
 #include "commands/GetSeatsForMovieTheater.h"
 #include "commands/ReserveSeatsForMovieTheater.h"
 #include "commands/SelectMovie.h"
+#include "commands/SelectTheater.h"
 
 template<class Seats_Container>
-class MainActivity : public SelectMovie::MovieSelectionInterface, public AvailableSeatsSetter, public SeatsProvider<Seats_Container>,
-                     public std::enable_shared_from_this<MainActivity<Seats_Container>> {
+class MainActivity
+        : public SelectMovie::MovieSelectionInterface,
+          public AvailableSeatsSetter,
+          public SeatsProvider<Seats_Container>,
+          public std::enable_shared_from_this<MainActivity<Seats_Container>>,
+          public SelectTheater::TheaterSelectionInterface {
 
     std::unordered_map<std::string, std::shared_ptr<Command>> commands;
 
@@ -43,7 +46,14 @@ public:
     }
 
     void setMovie(std::string movie) override {
+        std::cout << "Movie selected " << movie << std::endl;
         movieTheaterSeats.movie = std::move(movie);
+        movieTheaterSeats.theater = "";
+    }
+
+    void setTheater(std::string theater) override {
+        std::cout << "Theater selected" << theater << std::endl;
+        movieTheaterSeats.theater = std::move(theater);
     }
 
     void setSeats(Seats_Container seats) override {
@@ -54,7 +64,7 @@ public:
         return movieTheaterSeats.seats;
     }
 
-    void setCommand(const std::string &commandName, const std::shared_ptr<Command>& command) {
+    void setCommand(const std::string &commandName, const std::shared_ptr<Command> &command) {
         commands[commandName] = command;
     }
 };

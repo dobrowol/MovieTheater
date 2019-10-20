@@ -15,8 +15,8 @@ struct MovieTheaterSeats {
                                                                 seats(0) {}
 
     MovieTheaterSeats(std::string movie, std::string theater, std::bitset<20> seats) : movie(std::move(movie)),
-                                                                                                     theater(std::move(theater)),
-                                                                                                     seats(seats) {}
+                                                                                       theater(std::move(theater)),
+                                                                                       seats(seats) {}
 
     std::string movie;
     std::string theater;

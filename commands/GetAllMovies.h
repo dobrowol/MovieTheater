@@ -7,6 +7,7 @@
 
 #ifndef COMMANDS_GETALLMOVIES_H_
 #define COMMANDS_GETALLMOVIES_H_
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -24,13 +25,13 @@ public:
     virtual ~GetAllMovies() = default;
 
     bool execute(std::vector<std::string> args) override {
-        if(inputCheck(args)) {
+        if (inputCheck(args)) {
             auto callback = [&](const std::vector<std::string> &res) {
                 this->handle(res);
             };
             viewModel.getAllMovies()->observe(callback);
             return true;
-        } else{
+        } else {
             return false;
         }
     }

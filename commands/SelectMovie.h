@@ -16,15 +16,14 @@ public:
         virtual void setMovie(std::string) = 0;
     };
 
-    explicit SelectMovie(std::shared_ptr<MovieSelectionInterface> movieSelectionInterface) :
-            movieSelectionInterface(std::move(movieSelectionInterface)) {}
+    explicit SelectMovie(MovieSelectionInterface &movieSelectionInterface) :
+            movieSelectionInterface(movieSelectionInterface) {}
 
     bool execute(std::vector<std::string> args) override {
-        if(!inputCheck(args)){
+        if (!inputCheck(args)) {
             return false;
         }
-
-        movieSelectionInterface->setMovie(args[0]);
+        movieSelectionInterface.setMovie(args[0]);
         return true;
     }
 
@@ -33,6 +32,7 @@ public:
     }
 
 private:
-    std::shared_ptr<MovieSelectionInterface> movieSelectionInterface;
+    MovieSelectionInterface &movieSelectionInterface;
 };
+
 #endif //MOVIETHEATER_SELECTMOVIE_H

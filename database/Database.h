@@ -4,6 +4,7 @@
 
 #ifndef MOVIETHEATER_DATABASE_H
 #define MOVIETHEATER_DATABASE_H
+
 #include <memory>
 #include <vector>
 #include <mutex>
@@ -50,4 +51,5 @@ private:
 
 
 };
+
 #endif //MOVIETHEATER_DATABASE_H

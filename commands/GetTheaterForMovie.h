@@ -17,7 +17,7 @@ public:
     virtual ~GetTheaterForMovie() = default;
 
     bool execute(std::vector<std::string> args) override {
-        if(!inputCheck(args)){
+        if (!inputCheck(args)) {
             return false;
         }
         auto callback = [&](const std::vector<std::string> &res) {
@@ -39,4 +39,5 @@ public:
         return true;
     }
 };
+
 #endif //MOVIETHEATER_GETTHEATERFORMOVIE_H

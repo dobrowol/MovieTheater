@@ -16,13 +16,14 @@ using ::testing::NiceMock;
 namespace {
     class SelectMovieTest : public ::testing::Test {
     protected:
-        std::shared_ptr<MovieSelectionMock> movieSelectionMock = std::make_shared<MovieSelectionMock>();
+        MovieSelectionMock movieSelectionMock;;
         SelectMovie selectMovie;
-        SelectMovieTest():selectMovie(movieSelectionMock){}
+
+        SelectMovieTest() : selectMovie(movieSelectionMock) {}
     };
 
-    TEST_F(SelectMovieTest, shouldSelect){
-        EXPECT_CALL(*movieSelectionMock, setMovie("Legiony"));
+    TEST_F(SelectMovieTest, shouldSelect) {
+        EXPECT_CALL(movieSelectionMock, setMovie("Legiony"));
         selectMovie.execute({"Legiony"});
     }
 }

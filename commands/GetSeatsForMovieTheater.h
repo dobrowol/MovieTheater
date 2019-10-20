@@ -16,14 +16,14 @@ public:
 template<class ViewModel>
 class GetSeatsForMovieTheater : public Command {
     ViewModel viewModel;
-    std::shared_ptr<AvailableSeatsSetter> setter;
+    AvailableSeatsSetter &setter;
 public:
-    explicit GetSeatsForMovieTheater(std::shared_ptr<AvailableSeatsSetter> setter):setter(std::move(setter)){};
+    explicit GetSeatsForMovieTheater(AvailableSeatsSetter &setter) : setter(setter) {};
 
     virtual ~GetSeatsForMovieTheater() = default;
 
     bool execute(std::vector<std::string> args) override {
-        if(!inputCheck(args)){
+        if (!inputCheck(args)) {
             return false;
         }
         auto callback = [&](const std::bitset<20> &res) {
@@ -42,11 +42,12 @@ public:
             }
         }
         std::cout << std::endl;
-        setter->setSeats(res);
+        setter.setSeats(res);
     }
 
     bool inputCheck(std::vector<std::string> args) override {
         return true;
     }
 };
+
 #endif //MOVIETHEATER_GETSEATSFORMOVIETHEATER_H

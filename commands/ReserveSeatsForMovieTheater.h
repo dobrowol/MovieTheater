@@ -19,10 +19,10 @@ public:
 template<class ViewModel, class Seats>
 class ReserveSeatsForMovieTheater : public Command {
     ViewModel viewModel;
-    std::shared_ptr<SeatsProvider<Seats>> availableSeatsProvider;
+    SeatsProvider<Seats> &availableSeatsProvider;
     std::vector<int> seatsNumbers;
 public:
-    explicit ReserveSeatsForMovieTheater(std::shared_ptr<SeatsProvider<Seats>> availableSeatsProvider) :
+    explicit ReserveSeatsForMovieTheater(SeatsProvider<Seats> &availableSeatsProvider) :
             availableSeatsProvider(availableSeatsProvider) {};
 
     virtual ~ReserveSeatsForMovieTheater() = default;
@@ -35,11 +35,11 @@ public:
 
     bool execute(std::vector<std::string> args) override {
         if (inputCheck(args)) {
-            Seats availableSeats = availableSeatsProvider->getSeats();
+            Seats availableSeats = availableSeatsProvider.getSeats();
             Seats reserved_seats(0);
 
             for (auto seat_nbr : seatsNumbers) {
-                if(seat_nbr > availableSeats.size())
+                if (seat_nbr > availableSeats.size())
                     return false;
                 if (!availableSeats[seat_nbr])
                     reserved_seats[seat_nbr] = true;
@@ -69,4 +69,5 @@ public:
         return true;
     }
 };
+
 #endif //MOVIETHEATER_RESERVESEATSFORMOVIETHEATER_H

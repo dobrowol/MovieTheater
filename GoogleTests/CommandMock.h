@@ -8,7 +8,7 @@
 #include "gmock/gmock.h"
 #include "../Command.h"
 
-class CommandMock : public Command{
+class CommandMock : public Command {
 public:
     MOCK_METHOD(bool, execute, (std::vector<std::string>), (override));
     MOCK_METHOD(bool, inputCheck, (std::vector<std::string>), (override));
